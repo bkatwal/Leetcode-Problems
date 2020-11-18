@@ -15,52 +15,40 @@ public class MinWindowSubstring {
 
   public String minWindow(String s, String t) {
 
-    if (s == null || t == null) {
+    String result = "";
+    if (s.isEmpty() || t.length() > s.length()) {
+      return result;
+    }
+    int[] map = new int[128];
+    int start = 0;
+    int minStart = 0;
+    int end = 0;
+    int count = t.length();
+    int minLength = Integer.MAX_VALUE;
+    for (char temp : t.toCharArray()) {
+      map[temp]++;
+    }
+    while (end < s.length()) {
+      if (map[s.charAt(end)] > 0) {
+        count--;
+      }
+      map[s.charAt(end)]--;
+      end++;
+      while (count == 0) {
+        if (end - start < minLength) {
+          minStart = start;
+          minLength = end - start;
+        }
+        map[s.charAt(start)]++;
+        if (map[s.charAt(start)] > 0) {
+          count++;
+        }
+        start++;
+      }
+    }
+    if (minLength == Integer.MAX_VALUE) {
       return "";
     }
-    int[] tSet = new int[128];
-
-    populateTSet(tSet, t);
-
-    int required = t.length();
-
-    int left = 0;
-    int right = 0;
-    int found = 0;
-    int start = -1;
-    int end = -1;
-    int min = Integer.MAX_VALUE;
-    while (right < s.length()) {
-
-      while (found >= required) {
-        tSet[(int) s.charAt(left)]--;
-        left++;
-      }
-
-      if (tSet[(int) s.charAt(right)] > 0) {
-        tSet[(int) s.charAt(right)]--;
-        found++;
-      }
-
-      if (found == required && (left - right) < min) {
-        min = left - right;
-        start = left;
-        end = right;
-      }
-      right++;
-    }
-    return s.substring(start, end + 1);
-  }
-
-  private void populateTSet(int[] tSet, String t) {
-
-    for (char c : t.toCharArray()) {
-      tSet[(int) c]++;
-    }
-  }
-
-  public static void main(String[] args) {
-    MinWindowSubstring minWindowSubstring = new MinWindowSubstring();
-    minWindowSubstring.minWindow("ADOBECODEBANC", "ABC");
+    return s.substring(minStart, minStart + minLength);
   }
 }
