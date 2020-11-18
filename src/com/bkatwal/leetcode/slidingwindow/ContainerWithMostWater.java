@@ -1,6 +1,8 @@
 package com.bkatwal.leetcode.slidingwindow;
 
 
+import com.bkatwal.leetcode.util.TwoPointers;
+
 /**
  * 11. Container With Most Water
  * <p>
@@ -12,6 +14,7 @@ package com.bkatwal.leetcode.slidingwindow;
  * <p>
  * Notice that you may not slant the container.
  */
+@TwoPointers
 public class ContainerWithMostWater {
 
   public int maxArea(int[] height) {
